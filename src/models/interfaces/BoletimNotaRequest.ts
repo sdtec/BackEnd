@@ -1,0 +1,28 @@
+export interface BoletimNotaRequest {
+    id: string,
+    boletim_id: string,
+    notaRecuperacao: number,
+    situacao_id: string,
+    disciplina_id: string
+    falta1Bimestre: number,
+    falta2Bimestre: number,
+    falta3Bimestre: number,
+    falta4Bimestre: number,
+    notaConselhoClasse: number,
+    n11B: number,
+    n21B: number,
+    n31B: number,
+    rP1B: number,
+    n12B: number,
+    n22B: number,
+    n32B: number,
+    rP2B: number,
+    n13B: number,
+    n23B: number,
+    n33B: number,
+    rP3B: number,
+    n14B: number,
+    n24B: number,
+    n34B: number,
+    rP4B: number
+}

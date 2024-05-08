@@ -1,0 +1,22 @@
+export interface ResponsavelRequest{
+    id: string,
+    nome: string,
+    dataNascimento: Date,
+    profissao: string,
+    rg: string,
+    orgaoExpedidorRg: string,
+    cpf: string,
+    endereco: string,
+    bairro: string,
+    cep: string,
+    telefone: string,
+    celular: string,
+    telefoneTrabalho: string,
+    grauParentesco: string,
+    cidade_id: string,
+    estado_id: string,
+    nacionalidade_id: string,
+    email: string,
+    estadoCivil: string,
+    ativo: boolean
+}

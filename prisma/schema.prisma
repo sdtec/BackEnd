@@ -1,0 +1,869 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+//Use yarn prisma migrate dev and name-migration for a migration
+//Consult this URL for types of data: https://www.prisma.io/docs/orm/prisma-schema/data-model/models
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Aluno {
+
+  // Dados Aluno
+
+  id String @id @default(uuid())
+  nome String 
+  foto String
+  cpf String?
+  numeroNIS String?
+  rg String?
+  orgaoExpedidorRg String?
+  dataNascimento DateTime
+  email String?
+  telefoneResidencia String?
+  telefoneFixo String?
+  resideOutros String?
+  escolaAnterior String?
+  consideracaoFamiliar String?
+  Cor Cor @relation(fields: [cor_id], references: [id])
+  cor_id String
+  Genero Genero @relation(fields: [genero_id], references: [id])
+  genero_id String
+  Cidade Cidade @relation(fields: [cidade_id], references: [id])
+  cidade_id String
+  Estado Estado @relation(fields: [estado_id], references: [id])
+  estado_id String
+  Nacionalidade Nacionalidade @relation(fields: [nacionalidade_id], references: [id])
+  nacionalidade_id String
+  ativo Boolean @default(true)
+  
+  // Dados Mãe
+
+  nomeMae String
+  cpfMae String
+  rgMae String
+  orgaoExpedidorRgMae String
+  dataNascimentoMae DateTime
+  resideMae Boolean
+  profissaoMae String
+  trabalhoMae String?
+  telefoneTrabalhoMae String?
+  
+  // Dados pai
+  
+  nomePai String
+  cpfPai String
+  rgPai String
+  orgaoExpedidorRgPai String
+  dataNascimentoPai DateTime
+  residePai Boolean
+  profissaoPai String
+  trabalhoPai String?
+  telefoneTrabalhoPai String? 
+  
+  // Aspectos de Saúde
+  
+  acompanhamentoEspecialista Boolean @default(false)
+  acompanhamentoEspecialistaPergunta String?
+  alergiaMedicamento Boolean @default(false)
+  alergiaMedicamentoPergunta String?
+  asma Boolean @default(false)
+  avisarNome1 String?
+  avisarNome2 String?
+  diabetes Boolean @default(false)
+  diabetesInsulina Boolean @default(false)
+  doencaCatapora Boolean @default(false)
+  doencaCaxumba Boolean @default(false)
+  doencaCongenita Boolean @default(false)
+  doencaCoqueluche Boolean @default(false)
+  doencaOutro String?
+  doencaRubeola Boolean @default(false)
+  doencaSarampo Boolean @default(false)
+  epilepsia Boolean @default(false) 
+  epilepsiaTratamento Boolean @default(false)
+  hipertensao Boolean @default(false)
+  medicacaoEspecifica Boolean @default(false)
+  medicacaoEspecificaPergunta String?
+  necessidadeAuditiva Boolean @default(false)
+  necessidadeAutismo Boolean @default(false)
+  necessidadeClinica String?
+  necessidadeClinicaEndereco String?
+  necessidadeClinicaTelefone String?
+  necessidadeMotora Boolean @default(false)
+  necessidadeSindromeDown Boolean @default(false)
+  necessidadeTDA Boolean @default(false)
+  necessidadeTDAH Boolean @default(false)
+  necessidadeTDO Boolean @default(false)
+  necessidadeVisual Boolean @default(false)
+  parentesco1 String?
+  parentesco2 String?
+  parentescoTelefone1 String?
+  parentescoTelefone2 String?
+  planoSaude Boolean @default(false)
+  planoSaudePergunta String?
+  tratamentoMedico Boolean @default(false)
+  tratamentoMedicoPergunta String?
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  Boletim Boletim[]
+  Conceito Conceito[]
+  Contrato Contrato[]
+  ContratoModalidade ContratoModalidade[]
+  Matricula Matricula[]
+  MatriculaModalidade MatriculaModalidade[]  
+
+
+  @@map("Aluno")
+}
+
+model Avaliacao {
+   id String @id @default(uuid())
+   nome String
+   ativo Boolean @default(true)
+
+   created_at DateTime? @default(now())
+   updated_at DateTime? @default(now())
+
+   @@map("Avaliacao")
+
+}
+
+model Boletim {
+  id String @id @default(uuid())
+  
+  Aluno Aluno @relation(fields: [aluno_id], references: [id])
+  aluno_id String
+  Turma Turma @relation(fields: [turma_id], references: [id])
+  turma_id String
+  Matricula Matricula @relation(fields: [matricula_id], references: [id])
+  matricula_id String
+  fechado Boolean @default(false)
+  ano Int
+
+  BoletimNota BoletimNota[]
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  @@map("Boletim")
+}
+
+model BoletimNota {
+  id String @id @default(uuid())
+  Boletim Boletim @relation(fields: [boletim_id], references: [id])
+  boletim_id String
+  notaRecuperacao Float?
+  Situacao Situacao @relation(fields: [situacao_id], references: [id])
+  situacao_id String
+  Disciplina Disciplina @relation(fields: [disciplina_id], references: [id])
+  disciplina_id String
+  falta1Bimestre Int @default(0)
+  falta2Bimestre Int @default(0)
+  falta3Bimestre Int @default(0)
+  falta4Bimestre Int @default(0)
+  notaConselhoClasse Float?
+  n11B Float?
+  n21B Float?
+  n31B Float?
+  rP1B Float?
+  n12B Float?
+  n22B Float?
+  n32B Float?
+  rP2B Float?
+  n13B Float?
+  n23B Float?
+  n33B Float?
+  rP3B Float?
+  n14B Float?
+  n24B Float?
+  n34B Float?
+  rP4B Float?
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  @@map("BoletimNota")
+}
+
+model CentroCusto {
+  id String @id @default(uuid())
+  nome String
+  ativo Boolean @default(true)
+
+  Operacao Operacao @relation(fields: [operacao_id], references: [id])
+  operacao_id String
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  @@map("CentroCusto")
+}
+
+model Cidade {
+  id String @id @default(uuid())
+  nome String
+  ativo Boolean @default(true)
+
+  Estado Estado @relation(fields: [estado_id],  references: [id])
+  estado_id String
+
+  Aluno Aluno[]
+  Responsavel Responsavel[]
+  Empresa Empresa[]
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+  
+  @@map("Cidade")
+}
+
+model CobrancaEscolar {
+  id String @id @default(uuid())
+  
+  NivelSerie NivelSerie @relation(fields: [nivelSerie_id], references: [id])
+  nivelSerie_id String
+
+  valorSemiIntegral Decimal
+  valorIntegral Decimal
+  valorMeioPeriodo Decimal
+  dataVencimento DateTime
+  ativo Boolean @default(true)
+  quantidadeParcela Int
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  @@map("CobrancaEscolar")
+}
+
+model CobrancaModalidade {
+  id String @id @default(uuid())
+
+  Modalidade Modalidade @relation(fields: [modalidade_id], references: [id])
+  modalidade_id String
+  dataVencimento DateTime
+  valor Decimal
+  ativo Boolean @default(true)
+  quantidadeParcela Int
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  @@map("CobrancaModalidade")
+}
+
+model Conceito {
+  id String @id @default(uuid())
+  frequencia1Bimestre Int?
+  frequencia2Bimestre Int?
+  frequencia3Bimestre Int?
+  frequencia4Bimestre Int?
+  observacao String?
+  Aluno Aluno @relation(fields: [aluno_id], references: [id])
+  aluno_id String
+  Turma Turma @relation(fields: [turma_id], references: [id])
+  turma_id String
+  Matricula Matricula @relation(fields: [matricula_id], references: [id])
+  matricula_id String
+
+  ConceitoAvaliacao ConceitoAvaliacao[]
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  @@map("Conceito")
+
+}
+
+model ConceitoAvaliacao {
+  id String @id @default(uuid())
+
+  Conceito Conceito @relation(fields: [conceito_id], references: [id])
+  conceito_id String  
+  DesenvolvimentoConceito DesenvolvimentoConceito @relation(fields: [desenvolvimentoConceito_id], references: [id])
+  desenvolvimentoConceito_id String
+  avaliacao1B_id String?
+  avaliacao2B_id String?
+  avaliacao3B_id String?
+  avaliacao4B_id String?
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  @@map("ConceitoAvaliacao")
+
+}
+
+model Contrato {
+  id String @id @default(uuid())
+
+  Aluno Aluno @relation(fields: [aluno_id], references: [id])
+  aluno_id String
+  Turma Turma @relation(fields: [turma_id], references: [id])
+  turma_id String
+  Matricula Matricula @relation(fields: [matricula_id], references: [id])
+  matricula_id String
+  ano Int
+  data DateTime
+
+  ContratoParcela ContratoParcela[]
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  @@map("Contrato")
+}
+
+model ContratoParcela {
+  id String @id @default(uuid())
+  
+  Contrato Contrato @relation(fields: [contrato_id], references: [id])
+  contrato_id String
+  FormaPagamento FormaPagamento? @relation(fields: [formaPagamento_id], references: [id])
+  formaPagamento_id String?
+  numeroParcela Int
+  dataVencimento DateTime
+  valorDesconto Decimal?
+  total Decimal?
+  dataBaixaPagamento DateTime?
+  observacao String?
+  juros Decimal?
+  multa Decimal?
+  valorPagamento Decimal?
+  dataPagamento DateTime?
+  usuario_id String?
+  ativo Boolean @default(true)
+  valorCobrado Decimal
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  @@map("ContratoParcela")
+}
+
+model ContratoModalidade {
+  id String @id @default(uuid())
+  observacao String?
+  quantidadeParcela Int
+  dataVencimento DateTime
+  TurmaModalidade TurmaModalidade @relation(fields: [turmaModalidade_id], references: [id])
+  turmaModalidade_id String
+  Aluno Aluno @relation(fields: [aluno_id], references: [id])
+  aluno_id String
+  MatriculaModalidade MatriculaModalidade @relation(fields: [matriculaModalidade_id], references: [id])
+  matriculaModalidade_id String
+
+  ContratoParcelaModalidade ContratoParcelaModalidade[]
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  @@map("ContratoModalidade")
+}
+
+model ContratoParcelaModalidade {
+  id String @id @default(uuid())
+  ContratoModalidade ContratoModalidade @relation(fields: [contratoModalidade_id], references: [id]) 
+  contratoModalidade_id String
+  valorCobrado Decimal
+  valorPagamento Decimal
+  numeroParcela Int
+  dataPagamento DateTime?
+  dataVencimento DateTime
+  valorDesconto Decimal? 
+  Situacao Situacao @relation(fields: [situacao_id], references: [id])
+  situacao_id String
+  dataBaixaPagamento DateTime?
+  FormaPagamento FormaPagamento? @relation(fields: [formaPagamento_id], references: [id])
+  formaPagamento_id String?
+  juros Decimal?
+  multa Decimal?
+  total Decimal? 
+  observacao String?
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  @@map("ContratoParcelaModalidade")
+}
+
+model Cor {
+  id String @id @default(uuid())
+  nome String
+  ativo Boolean @default(true)
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  Aluno Aluno[]
+
+  @@map("Cor")
+}
+
+model Desconto {
+  id String @id @default(uuid())
+  nome String
+  valor Decimal
+  tipo Decimal
+  ativo Boolean @default(true)
+
+  MatriculaModalidade MatriculaModalidade[]
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  @@map("Desconto")
+}
+
+model DesenvolvimentoAluno {
+  id String @id @default(uuid())
+  nome String
+  ativo Boolean @default(true)
+
+  DesenvolvimentoConceito DesenvolvimentoConceito[]
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  @@map("DesenvolvimentoAluno")
+}
+
+model DesenvolvimentoConceito {
+  id String @id @default(uuid())
+  nome String
+  DesenvolvimentoAluno DesenvolvimentoAluno @relation(fields: [desenvolvimentoAluno_id], references: [id])
+  desenvolvimentoAluno_id String
+
+  ConceitoAvaliacao ConceitoAvaliacao[]
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  @@map("DesenvolvimentoConceito")
+
+}
+
+model Disciplina {
+  id String @id @default(uuid())
+  nome String
+  ordem Int
+  cargaHoraria Int
+  valorCobrado Decimal
+  ativo Boolean @default(true)
+
+  BoletimNota BoletimNota[]
+  DisciplinaSerie DisciplinaSerie[]
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  @@map("Disciplina")
+}
+
+model DisciplinaSerie {
+  id String @id @default(uuid())
+  Disciplina Disciplina @relation(fields: [disciplina_id], references: [id])
+  disciplina_id String
+  Serie Serie @relation(fields: [serie_id], references: [id])
+  serie_id String
+  ativo Boolean @default(true)
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+  @@map("DisciplinaSerie")  
+}
+
+model Documento {
+  id String @id @default(uuid())
+  nome String
+  ativo Boolean @default(true)
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  @@map("Documento")
+}
+
+model Empresa {
+  id String @id @default(uuid())
+  nome String
+  nomeFantasia String
+  endereco String
+  numeroEndereco Int
+  Cidade Cidade @relation(fields: [cidade_id], references: [id])
+  cidade_id String
+  numeroCnpj String
+  numeroTelefone String
+  complemento String?
+  bairro String
+  email String
+  nomeSecretaria String
+  nomeDiretor String 
+  numeroCep String
+  resolucao String?
+  declaracao String?
+  logoEmpresa String?
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  @@map("Empresa")
+}
+
+model Estado {
+  id String @id @default(uuid())
+  nome String
+  sigla String
+  Nacionalidade Nacionalidade @relation(fields: [nacionalidade_id], references: [id])
+  nacionalidade_id String
+  ativo Boolean @default(true)
+
+  Aluno Aluno[]
+  Cidade Cidade[]
+  Responsavel Responsavel[]
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  @@map("Estado")
+}
+
+model FormaPagamento {
+  id String @id @default(uuid())
+  nome String
+  ativo Boolean    @default(true)
+
+  ContratoParcela ContratoParcela[]
+  ContratoParcelaModalidade ContratoParcelaModalidade[]
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  @@map("FormaPagamento")
+}
+
+model Genero {
+  id String @id @default(uuid())
+  nome String
+  ativo Boolean @default(true)
+
+  Aluno Aluno[]
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  @@map("Genero")
+}
+
+model Matricula {
+  id String @id @default(uuid())
+  Aluno Aluno @relation(fields: [aluno_id], references: [id])
+  aluno_id String
+  TipoContrato TipoContrato @relation(fields: [tipoContrato_id], references: [id])
+  tipoContrato_id String
+  Turma Turma @relation(fields: [turma_id], references: [id])
+  turma_id String
+  Situacao Situacao @relation(fields: [situacao_id], references: [id])
+  situacao_id String
+  observacao String?
+  anoLetivo Int
+  Responsavel Responsavel @relation(fields: [responsavel_id], references: [id])
+  responsavel_id String
+  dataMatricula DateTime
+
+  Boletim Boletim[]
+  Conceito Conceito[]
+  Contrato Contrato[] 
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+  
+  @@map("Matricula")
+}
+
+model MatriculaModalidade {
+  id String @id @default(uuid())
+  Aluno Aluno @relation(fields: [aluno_id], references: [id])
+
+  aluno_id String
+  TurmaModalidade TurmaModalidade @relation(fields: [turmaModalidade_id], references: [id])
+
+  turmaModalidade_id String
+  Situacao Situacao @relation(fields: [situacao_id], references: [id])
+
+  situacao_id String
+  quantidadeParcela Int
+  observacao String?
+  dataVencimento DateTime
+  dataMatricula DateTime
+  Desconto Desconto @relation(fields: [desconto_id], references: [id])
+
+  desconto_id String
+  Responsavel Responsavel @relation(fields: [responsavel_id], references: [id])
+
+  responsavel_id String
+
+  ContratoModalidade ContratoModalidade[]
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  @@map("MatriculaModalidade")
+}
+
+model Modalidade {
+  id String @id @default(uuid())
+  nome String
+  ativo Boolean @default(true)
+
+  TurmaModalidade TurmaModalidade[]
+  CobrancaModalidade CobrancaModalidade[]
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  @@map("Modalidade")
+}
+
+model Nacionalidade {
+  id String @id @default(uuid())
+  nome String 
+  ativo Boolean @default(true)
+
+  Aluno Aluno[]
+  Estado Estado[]
+  Responsavel Responsavel[]
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  @@map("Nacionalidade")
+}
+
+model NivelSerie {
+  id String @id @default(uuid())
+  nome String
+  valorTaxaPapelaria Decimal
+  ativo Boolean @default(true)
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+  CobrancaEscolar CobrancaEscolar[]
+  Serie Serie[]
+  @@map("NivelSerie")
+}
+
+model Operacao {
+  id String @id @default(uuid())
+  nome String 
+  ativo Boolean @default(true)
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  CentroCusto CentroCusto[]
+
+  @@map("Operacao")
+}
+
+model Professor {
+  id String @id @default(uuid())
+  nome String 
+  telefoneComercial String
+  telefoneCelular String
+  email String
+  senha String
+  lancarNotaRetroativa Boolean @default(true)
+  ativo Boolean @default(true)
+
+  TurmaModalidade TurmaModalidade[]
+
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  @@map("Professor")
+}
+
+model Responsavel {
+  id String @id @default(uuid())
+  nome String
+  dataNascimento DateTime
+  profissao String
+  rg String
+  orgaoExpedidorRg String
+  cpf String
+  endereco String
+  bairro String
+  cep String
+  telefone String
+  celular String
+  telefoneTrabalho String
+  grauParentesco String
+  
+  Cidade Cidade @relation(fields: [cidade_id], references: [id])
+  cidade_id String
+  Estado Estado @relation(fields: [estado_id], references: [id])
+  estado_id String
+  Nacionalidade Nacionalidade @relation(fields: [nacionalidade_id], references: [id])
+  nacionalidade_id String
+  email String
+  estadoCivil String
+  ativo Boolean @default(true)
+
+  MatriculaModalidade MatriculaModalidade[]
+  Matricula Matricula[]
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  @@map("Responsavel")
+}
+
+model Sala {
+  id String @id @default(uuid())
+  nome String
+  ativo Boolean @default(true)
+
+  Turma Turma[]
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  @@map("Sala")
+}
+
+model Serie {
+  id String @id @default(uuid())
+  nome String 
+  ordem Int
+  ativo Boolean @default(true)
+
+  NivelSerie NivelSerie @relation(fields: [nivelSerie_id], references: [id])
+  nivelSerie_id String
+  Turma Turma[]
+  DisciplinaSerie DisciplinaSerie[]
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  @@map("Serie")
+
+}
+
+model Situacao {
+  id String @id @default(uuid())
+  nome String
+  ativo Boolean @default(true)
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  BoletimNota BoletimNota[]
+  ContratoParcelaModalidade ContratoParcelaModalidade[]
+  Matricula Matricula[]
+  MatriculaModalidade MatriculaModalidade[]
+
+  @@map("Situacao")
+}
+
+model TipoContrato {
+  id String @id @default(uuid())
+  nome String
+  ativo Boolean @default(true)
+
+  Matricula Matricula[]
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  @@map("TipoContrato")
+}
+
+model Turma {
+  id String @id @default(uuid())
+
+  nome String
+  numeroCapacidade Int
+  valorMeioPeriodo Decimal
+  valorIntegral Decimal
+  valorSemiIntegral Decimal
+  anoCalendario Int
+  valorMensalidade Decimal
+  horarioInicial String
+  horarioFinal String
+  ordem Int
+  Turno Turno @relation(fields: [turno_id], references: [id])
+  turno_id String
+  Sala Sala @relation(fields: [sala_id], references: [id])
+  sala_id String
+  Serie Serie @relation(fields: [serie_id], references: [id])
+  serie_id String
+  ativo Boolean @default(true)
+
+  Boletim Boletim[]
+  Conceito Conceito[]
+  Contrato Contrato[]
+  Matricula Matricula[]
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  @@map("Turma")
+}
+
+model TurmaModalidade {
+  id String @id @default(uuid())
+  nome String
+  numeroCapacidade Int
+  valorMensalidade Decimal
+  anoCalendario String
+  dataVencimentoParcela DateTime
+  Turno Turno @relation(fields: [turno_id], references: [id])
+  turno_id String
+  Modalidade Modalidade @relation(fields: [modalidade_id], references: [id])
+  modalidade_id String
+  Professor Professor @relation(fields: [professor_id], references: [id])
+  professor_id String
+  ativo Boolean @default(true)
+
+  ContratoModalidade ContratoModalidade[]
+  MatriculaModalidade MatriculaModalidade[]
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  @@map("TurmaModalidade")
+}
+
+model Turno {
+  id String @id @default(uuid())
+  nome String
+  ativo Boolean @default(true)
+
+  Turma Turma[]
+  TurmaModalidade TurmaModalidade[]
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  @@map("Turno")
+}
+
+model Usuario {
+  id String @id @default(uuid())
+  nome String 
+  email String
+  senha String
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  @@map("Usuario")
+}
